@@ -1,30 +1,71 @@
 (ns bindscript.display
   (:require
-   [bindscript.core :as bindscript]))
+   [bindscript.core :as bindscript :refer [def-bindscript]]))
+
+
+(def col-code-bg        "#343029")
+(def col-code-plain     "#AFC7B2")
+(def col-code-highlight "#F3EFCA")
+(def col-code-error     "#E25F19")
+(def col-code-dimmed    "#4F7A8A")
+
+(def-bindscript ::my-script-1
+  a   7
+  b   (inc 2)
+  m   (assoc {} :sum (+ a b))
+  err (throw (ex-info "this failed" {}))
+  ok  (+ a 23))
+
+(defn code
+  [color s]
+  [:span
+   {:style {:font-family :monospace
+            :color color}}
+   (str s)])
+
 
 (defn binding-tr
-  [binding]
+  [{:as binding :keys [var expr value exception]}]
   [:tr
-   [:td (str (:var binding))]
-   [:td (str (:value binding))]
-   [:td (str (:exception binding))]
-   [:td (str (:expr binding))]])
+   [:td
+    {:style {:padding-right "1em"}}
+    [code (if exception col-code-error col-code-plain) var]]
+   [:td
+    {:style {:padding-right "1em"}}
+    [code col-code-dimmed expr]]
+   [:td
+    {:style {:padding-right "1em"}}
+    [code "#666666" "=>"]]
+   [:td
+    (if exception
+      [code col-code-error exception]
+      [code col-code-highlight value])]])
 
 
-(defn result-div
-  [result]
+(defn script-div
+  [script]
   [:div
-   [:h6
-    (str (:identifier result))]
-   [:table
-    (into [:tbody]
-          (map binding-tr (:bindings result)))]])
+   {:style {:margin-bottom "1em"}}
+            ;; :display :inline-block}}
+   [:div
+    {:style {:font-family :monospace
+             :background-color col-code-dimmed
+             :color col-code-bg
+             :padding "1em"}}
+    (str (:identifier script))]
+   [:div
+    {:style {:background-color col-code-bg
+             :color col-code-plain
+             :padding "1em"}}
+    [:table
+     (into [:tbody]
+           (map binding-tr (:bindings script)))]]])
 
 
 (defn display-div
   [data]
   (into [:div]
-        (map result-div (:results data))))
+        (map script-div (:results data))))
 
 
 (def test-data
