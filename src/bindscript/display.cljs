@@ -3,24 +3,29 @@
    [bindscript.core :as bindscript :refer [def-bindscript]]))
 
 
+(def-bindscript ::my-script-1
+  a 7
+  b (inc 2)
+  m (assoc {}
+           :sum
+           (+ a b))
+  v (assoc [] :k 1)
+  k (keyword "bind" "script"))
+
+
 (def col-code-bg        "#343029")
 (def col-code-plain     "#AFC7B2")
 (def col-code-highlight "#F3EFCA")
 (def col-code-error     "#E25F19")
 (def col-code-dimmed    "#4F7A8A")
 
-(def-bindscript ::my-script-1
-  a   7
-  b   (inc 2)
-  m   (assoc {} :sum (+ a b))
-  err (throw (ex-info "this failed" {}))
-  ok  (+ a 23))
 
 (defn code
   [color s]
   [:span
    {:style {:font-family :monospace
-            :color color}}
+            :color color
+            :white-space :pre-wrap}}
    (str s)])
 
 
@@ -28,15 +33,19 @@
   [{:as binding :keys [var expr value exception]}]
   [:tr
    [:td
-    {:style {:padding-right "1em"}}
+    {:style {:vertical-align :top
+             :padding-right "1em"}}
     [code (if exception col-code-error col-code-plain) var]]
    [:td
-    {:style {:padding-right "1em"}}
+    {:style {:vertical-align :top
+             :padding-right "1em"}}
     [code col-code-dimmed expr]]
    [:td
-    {:style {:padding-right "1em"}}
+    {:style {:vertical-align :top
+             :padding-right "1em"}}
     [code "#666666" "=>"]]
    [:td
+    {:style {:vertical-align :top}}
     (if exception
       [code col-code-error exception]
       [code col-code-highlight value])]])
@@ -46,15 +55,15 @@
   [script]
   [:div
    {:style {:margin-bottom "1em"}}
-            ;; :display :inline-block}}
    [:div
     {:style {:font-family :monospace
              :background-color col-code-dimmed
-             :color col-code-bg
+             :color col-code-highlight
              :padding "1em"}}
     (str (:identifier script))]
    [:div
-    {:style {:background-color col-code-bg
+    {:style {:scroll :auto
+             :background-color col-code-bg
              :color col-code-plain
              :padding "1em"}}
     [:table
