@@ -1,10 +1,10 @@
-(ns  ^:figwheel-hooks bindscript.core
-  #?(:cljs (:require-macros bindscript.core)))
+(ns bindscript.core)
 
-
-(defonce !script-results (atom []))
 
 (defonce !scripts (atom {}))
+
+;; TODO get rid of this
+(defonce !script-results (atom []))
 
 
 (defn eval-test-fn
@@ -50,7 +50,9 @@
        (reverse (get-in @!scripts [:order]))))
 
 
-(defn ^:before-load on-figwheel-after-load []
+
+(defn reset-scripts!
+  []
   (reset! !scripts {}))
 
 
@@ -66,11 +68,12 @@
         (->> (reset! !scripts)))))
 
 
-(defmacro def-bindscript
-  [identifier & body]
+(defn def-bindscript
+  [identifier body]
   (let [body (wrap-forms-in-fns [] body)]
     `(reg-script! {:identifier ~identifier
-                   :eval-fn (fn [] (let [~@body]))})))
+                   :eval-fn (fn []
+                              (let [~@body]))})))
 
 
 
@@ -83,5 +86,6 @@
 
 (defn eval-all-scripts
   []
-  {:results (map #(eval-script (get-in @!scripts [:scripts %]))
-                 (get @!scripts :order))})
+  {:results (map eval-script (scripts-in-order))})
+   ;; :results (map #(eval-script (get-in @!scripts [:scripts %]))
+   ;;               (get @!scripts :order))})

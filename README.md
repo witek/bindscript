@@ -1,6 +1,7 @@
 # bindscript
 
-bindscript is antoher tool for interactive coding ClojureScript. It displays values from a bingins forms in the browser.
+bindscript is antoher tool for interactive coding ClojureScript.
+It displaysvalues from a bingins forms in the browser.
 
 ## Quick Usage
 
@@ -12,7 +13,7 @@ Require:
 
 `[bindscript.core :refer [def-bindscript]]`
 
-Put your test or inspecting code like in a `let` expression into any ClojureScript file:
+Put bindscripts into any ClojureScript file. Similar to an usual `let` expression:
 
 ```clojure
 (def-bindscript ::my-script-1
