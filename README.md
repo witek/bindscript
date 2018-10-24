@@ -1,9 +1,11 @@
 # bindscript
 
 [![Clojars Project](https://img.shields.io/clojars/v/witek/bindscript.svg)](https://clojars.org/witek/bindscript)
+https://cljdoc.org/badge/witek/bindscript
+
 
 bindscript is antoher tool for interactive coding ClojureScript.
-It displays values from its bingins forms in a heads-up in the browser.
+It displays values from its bindings forms in a heads-up in the browser.
 
 ## Quick Usage
 

@@ -1,4 +1,4 @@
-(ns bindscript.display
+(ns ^:no-doc bindscript.display
   (:require
    [reagent.core :as r]))
 
