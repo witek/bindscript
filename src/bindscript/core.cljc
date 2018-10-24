@@ -1,9 +1,12 @@
 (ns bindscript.core)
 
-
+;; Global map of all defined bindscripts by its identifier.
 (defonce !scripts (atom {}))
 
-;; TODO get rid of this
+
+;; Temporary storage for results of a single evaluation of a bindscript.
+;; Stores :var :expr :value :exception
+;; Used by `eval-script`.
 (defonce !script-results (atom []))
 
 
@@ -45,18 +48,20 @@
 
 
 (defn scripts-in-order
+  "Provide all bindscripts in order."
   []
   (map #(get-in @!scripts [:scripts %])
        (reverse (get-in @!scripts [:order]))))
 
 
-
 (defn reset-scripts!
+  "Remove all defined bindscripts."
   []
   (reset! !scripts {}))
 
 
 (defn reg-script!
+  "Register a bindscript."
   [script]
   (let [name (:identifier script)
         scripts @!scripts
@@ -68,13 +73,13 @@
         (->> (reset! !scripts)))))
 
 
-(defn def-bindscript
+(defn def-bindscript-macro-impl
+  "Implementation for the `bindscript.api/def-bindscript` macro."
   [identifier body]
   (let [body (wrap-forms-in-fns [] body)]
     `(reg-script! {:identifier ~identifier
                    :eval-fn (fn []
                               (let [~@body]))})))
-
 
 
 (defn- eval-script
@@ -85,7 +90,6 @@
 
 
 (defn eval-all-scripts
+  "Evaluates all defined bindscripts, returns the results."
   []
   {:results (map eval-script (scripts-in-order))})
-   ;; :results (map #(eval-script (get-in @!scripts [:scripts %]))
-   ;;               (get @!scripts :order))})

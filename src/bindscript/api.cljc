@@ -5,20 +5,33 @@
    #?(:cljs [bindscript.display :as bd-display])))
 
 
+;; Provide a mechanism to disable execution of bindscripts.
+;; In production this should yield false.
+;; TODO check if this works for production builds
+
 (def enabled?
   #?(:cljs (-> js/window .-goog .-DEBUG)
      :clj  false))
 
 
 (defmacro def-bindscript
+  "Define a bindscript for later execution and inspection. The script will be
+  registered with `identifier`, which sould be a qualified keyword.
+  `body` is an usual bindings-form, like in `let`."
   [identifier & body]
-  (bs/def-bindscript identifier body))
+  (bs/def-bindscript-macro-impl identifier body))
 
+
+;; Since figwheel reloads ClojureScript in the browser on every change,
+;; we reset (remove) all known scripts before load. This way the bindscripts
+;; from the loaded files are defined and can be displayed in the heads-up.
 
 (defn ^:before-load reset-bindscripts!
   []
   (bs/reset-scripts!))
 
+
+;; The heads-up must be installed in the browser exactly once.
 
 (defonce installed
   (do
