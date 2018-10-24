@@ -1,7 +1,7 @@
 # bindscript
 
 bindscript is antoher tool for interactive coding ClojureScript.
-It displaysvalues from a bingins forms in the browser.
+It displays values from its bingins forms in the browser.
 
 ## Quick Usage
 
