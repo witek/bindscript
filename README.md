@@ -1,5 +1,7 @@
 # bindscript
 
+[![Clojars Project](https://img.shields.io/clojars/v/witek/bindscript.svg)](https://clojars.org/witek/bindscript)
+
 bindscript is antoher tool for interactive coding ClojureScript.
 It displays values from its bingins forms in the browser.
 
@@ -7,7 +9,7 @@ It displays values from its bingins forms in the browser.
 
 Add dependency to your project:
 
-`witek/bindscript {:mvn/version "1.0.1"}`
+`witek/bindscript {:mvn/version "X.Y.Z"}`
 
 Require:
 
