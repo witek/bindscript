@@ -1,2 +1,2 @@
-{:deps {witek/browser-headsup {:mvn/version "1.0.1"}}}
+{:deps {witek/browser-headsup {:mvn/version "1.0.2"}}}
                                ;;:local/root "/p/browser-headsup"}}}
