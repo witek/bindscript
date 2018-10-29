@@ -2,7 +2,8 @@
 
 (set-env!
  :resource-paths #{"src"}
- :dependencies '[[adzerk/bootlaces "0.1.13" :scope "test"]])
+ :dependencies '[[witek/browser-headsup "1.0.1"]
+                 [adzerk/bootlaces "0.1.13" :scope "test"]])
 
 (require '[adzerk.bootlaces :refer :all])
 
@@ -12,7 +13,7 @@
 
  pom {:project     'witek/bindscript
       :version     +version+
-      :description ""
+      :description "Dispay values of ClojureScript bindings for interactive coding"
       :developers  {"Witoslaw Koczewski" "wi@koczewski.de"}
       :url         "https://github.com/witek/bindscript"
       :scm         {:url "https://github.com/witek/bindscript.git"}
