@@ -1,7 +1,9 @@
 # bindscript
 
-[![Clojars Project](https://img.shields.io/clojars/v/witek/bindscript.svg)](https://clojars.org/witek/bindscript)
-https://cljdoc.org/badge/witek/bindscript
+[![Clojars](https://img.shields.io/clojars/v/witek/bindscript.svg)](https://clojars.org/witek/bindscript)
+[![cljdoc](https://cljdoc.org/badge/witek/bindscript)](https://cljdoc.org/d/witek/bindscript/CURRENT)
+
+
 
 
 bindscript is antoher tool for interactive coding ClojureScript.
