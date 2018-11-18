@@ -17,7 +17,7 @@ Add dependency to your project:
 
 Require:
 
-`[bindscript.core :refer [def-bindscript]]`
+`[bindscript.api :refer [def-bindscript]]`
 
 Put bindscripts into any ClojureScript file. Similar to an usual `let` expression:
 
