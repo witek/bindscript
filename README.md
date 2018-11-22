@@ -22,14 +22,26 @@ Require:
 Put bindscripts into any ClojureScript file. Similar to an usual `let` expression:
 
 ```clojure
-(def-bindscript ::my-script-1
-  a 7
-  b (inc 2)
-  m (assoc {}
-           :sum
-           (+ a b))
-  v (assoc [] :k 1)
-  k (keyword "bind" "script"))
+(def-bindscript ::simple
+  test-data   [1 2 3 5 8]
+  incremented (map inc test-data))
+```
+
+Bindscript catches exceptions, if you make a mistake:
+
+```clojure
+(def-bindscript :some.project/with-error
+  test-data "some string"
+  result    (conj "some string" "more text"))
+```
+
+Use `:spec` keyword to conform the last binding to a clojure spec:
+
+```clojure
+(def-bindscript :some.project/with-spec
+  k1    :some/keyword
+  :spec qualified-keyword?
+  :spec simple-keyword?)
 ```
 
 Let figwheel load it into your browser and bindscript display the values:
