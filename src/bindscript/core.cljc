@@ -1,4 +1,6 @@
-(ns bindscript.core)
+(ns bindscript.core
+  (:require
+   [clojure.spec.alpha :as s]))
 
 ;; Global map of all defined bindscripts by its identifier.
 (defonce !scripts (atom {}))
@@ -10,41 +12,52 @@
 (defonce !script-results (atom []))
 
 
+(defn spec
+  [spec value]
+  (let [conformed (s/conform spec value)]
+    (if (= :cljs.spec.alpha/invalid conformed)
+      (throw (ex-info (s/explain-str spec value)
+                      {})))
+    conformed))
+
 (defn eval-test-fn
-  [f var-name form]
+  [f var-name form spec]
   (try
     (let [ret-val (f)]
       (swap! !script-results conj {:var var-name
                                    :expr form
-                                   :value ret-val})
+                                   :spec (if (empty? spec) nil spec)
+                                   :value (pr-str ret-val)})
       ret-val)
     (catch #?(:cljs :default :clj Exception) ex
       (swap! !script-results conj {:var var-name
                                    :expr form
+                                   :spec (if (empty? spec) nil spec)
                                    :exception ex})
       nil)))
 
 
 (defn wrap-in-fn
-  [form var-name form]
-  `(eval-test-fn (fn [] ~form) ~(str var-name) ~(str form)))
+  [form var-name form spec]
+  `(eval-test-fn (fn [] ~form) ~(pr-str var-name) ~(pr-str form) ~(if spec (pr-str spec) nil)))
 
 
 (defn wrap-forms-in-fns
-  [result body]
+  [result body current-var]
   (if (empty? body)
     result
     (let [next-var (first body)
           next-form (second body)
 
-          ;; spec? (= :spec next-var)
-          ;; next-var (if spec? (second next-form) next-var)
-          ;; next-form (if spec? `(validate/spec ~(first next-form) ~(second next-form)) next-form)
+          spec? (= :spec next-var)
+          spec (if spec? next-form nil)
+          next-var (if spec? current-var next-var)
+          next-form (if spec? `(spec ~spec ~current-var) next-form)
 
           rest-body (rest (rest body))
           result (conj result next-var)
-          result (conj result (wrap-in-fn next-form next-var next-form))]
-      (wrap-forms-in-fns result rest-body))))
+          result (conj result (wrap-in-fn next-form next-var next-form spec))]
+      (wrap-forms-in-fns result rest-body next-var))))
 
 
 (defn scripts-in-order
@@ -76,7 +89,7 @@
 (defn def-bindscript-macro-impl
   "Implementation for the `bindscript.api/def-bindscript` macro."
   [identifier body]
-  (let [body (wrap-forms-in-fns [] body)]
+  (let [body (wrap-forms-in-fns [] body 'NONE)]
     `(reg-script! {:identifier ~identifier
                    :eval-fn (fn []
                               (let [~@body]))})))

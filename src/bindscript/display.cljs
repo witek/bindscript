@@ -13,35 +13,62 @@
 (def col-code-dimmed    headsup/col-dimmed)
 
 
-(defn code
-  [color s]
-  [:span
-   {:style {:font-family :monospace
-            :color color
-            :white-space :pre-wrap}}
-   (str s)])
+(defn exception-code
+  [exception prefix]
+  [:div
+   {:style {:color col-code-error}}
+   [:div
+    {:style {:font-family :serif}}
+    prefix]
+   (let [message (.-message exception)
+         message (if message message (str exception))
+         data (ex-data exception)
+         data (if (empty? data) nil data)
+         cause (or (ex-cause exception) (.-cause exception))]
+     [:div
+      (str message)
+      (if data
+        [:div (pr-str data)])
+      (if cause [exception-code cause "cause"])])])
 
 
 (defn binding-tr
-  [{:as binding :keys [var expr value exception]}]
+  [{:as binding :keys [var expr spec value exception]}]
   [:tr
+   {:style {:font-family :monospace}}
+
    [:td
     {:style {:vertical-align :top
-             :padding-right spacing}}
-    [code (if exception col-code-error col-code-plain) var]]
+             :padding-right spacing
+             :white-space :nowrap
+             :color col-code-plain}}
+    var]
+
    [:td
     {:style {:vertical-align :top
-             :padding-right spacing}}
-    [code col-code-dimmed expr]]
+             :padding-right spacing
+             :color col-code-dimmed}}
+    (if spec
+      [:span
+       [:span
+        {:style {:color (if exception col-code-error headsup/col-default2)
+                 :font-family :serif}}
+        "spec "]
+       spec]
+      expr)]
+
    [:td
     {:style {:vertical-align :top
-             :padding-right spacing}}
-    [code headsup/col-default2 "=>"]]
+             :padding-right spacing
+             :color headsup/col-default}}
+    "=>"]
+
    [:td
-    {:style {:vertical-align :top}}
+    {:style {:vertical-align :top
+             :color col-code-highlight}}
     (if exception
-      [code col-code-error exception]
-      [code col-code-highlight value])]])
+      [exception-code exception "error"]
+      value)]])
 
 
 (defn script-div
