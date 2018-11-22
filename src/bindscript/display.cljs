@@ -4,7 +4,8 @@
    [browser-headsup.api :as headsup]))
 
 
-(def spacing headsup/spacing)
+(def spacing "10px")
+(def tr-spacing "5px")
 
 (def col-code-bg        headsup/col-bg)
 (def col-code-plain     headsup/col-default)
@@ -32,6 +33,15 @@
       (if cause [exception-code cause "cause"])])])
 
 
+(def collapse-len 42)
+
+(defn collapsed-str
+  [s]
+  (let [s (str s)]
+    (if (< collapse-len (count s))
+      (str (.substring s 0 collapse-len) "...")
+      s)))
+
 (defn binding-tr
   [{:as binding :keys [var expr spec value exception]}]
   [:tr
@@ -40,13 +50,16 @@
    [:td
     {:style {:vertical-align :top
              :padding-right spacing
+             :padding-top tr-spacing
              :white-space :nowrap
              :color col-code-plain}}
     var]
 
    [:td
     {:style {:vertical-align :top
+             :white-space :nowrap
              :padding-right spacing
+             :padding-top tr-spacing
              :color col-code-dimmed}}
     (if spec
       [:span
@@ -54,17 +67,12 @@
         {:style {:color (if exception col-code-error headsup/col-default2)
                  :font-family :serif}}
         "spec "]
-       spec]
-      expr)]
+       [collapsed-str spec]]
+      [collapsed-str expr])]
 
    [:td
     {:style {:vertical-align :top
-             :padding-right spacing
-             :color headsup/col-default}}
-    "=>"]
-
-   [:td
-    {:style {:vertical-align :top
+             :padding-top tr-spacing
              :color col-code-highlight}}
     (if exception
       [exception-code exception "error"]
