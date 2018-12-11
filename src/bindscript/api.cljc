@@ -1,4 +1,4 @@
-(ns ^:figwheel-hooks bindscript.api
+(ns bindscript.api
   #?(:cljs (:require-macros bindscript.api))
   (:require
    [bindscript.core :as bs]
@@ -20,15 +20,6 @@
   `body` is an usual bindings-form, like in `let`."
   [identifier & body]
   (bs/def-bindscript-macro-impl identifier body))
-
-
-;; Since figwheel reloads ClojureScript in the browser on every change,
-;; we reset (remove) all known scripts before load. This way the bindscripts
-;; from the loaded files are defined and can be displayed in the heads-up.
-
-(defn ^:before-load reset-bindscripts!
-  []
-  (bs/reset-scripts!))
 
 
 ;; The heads-up must be installed in the browser exactly once.

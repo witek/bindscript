@@ -79,7 +79,12 @@
   (let [name (:identifier script)
         scripts @!scripts
         order (:order scripts)
-        order (conj order name)]
+
+        ;; we want to only see bindscripts from reloaded namespaces, therefor
+        ;; we reset the order if an already known name comes up
+        order (if ((into #{} order) name)
+                (list name)
+                (conj order name))]
     (-> scripts
         (assoc-in [:order] order)
         (assoc-in [:scripts name] script)
