@@ -1,2 +1,12 @@
-{:deps {witek/browser-headsup {:mvn/version "1.0.2"}}}
-                               ;;:local/root "/p/browser-headsup"}}}
+{:deps {witek/browser-headsup {:mvn/version "1.0.2"}}
+
+ :aliases
+ {:dev {:extra-paths ["target"]
+        :override-deps {witek/browser-headsup {:local/root "/p/browser-headsup"}}
+        :extra-deps {com.bhauman/figwheel-main {:mvn/version "0.1.9"}
+                     com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
+                     binaryage/devtools {:mvn/version "0.9.10"}}
+        :main-opts ["--main" "figwheel.main" "--build" "dev"]}
+
+  :ancient {:main-opts ["-m" "deps-ancient.deps-ancient"]
+            :extra-deps {deps-ancient {:mvn/version "RELEASE"}}}}}

@@ -1,0 +1,2 @@
+{:main            bindscript.demo-spa
+ :preloads        [devtools.preload]}
