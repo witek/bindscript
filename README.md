@@ -13,7 +13,7 @@ It displays values from its bindings forms in a heads-up in the browser.
 
 Add dependency to your project:
 
-`witek/bindscript {:mvn/version "X.Y.Z"}`
+`witek/bindscript {:mvn/version "RELEASE"}`
 
 Require:
 
@@ -50,9 +50,3 @@ Let figwheel load it into your browser and bindscript display the values:
 
 Get insights, modify your code, loop!
 
-## License
-
-Copyright © 2018 Witoslaw Koczewski
-
-Distributed under the Eclipse Public License either version 1.0 or any later
-version.
