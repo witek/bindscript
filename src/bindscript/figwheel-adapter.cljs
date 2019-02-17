@@ -1,4 +1,4 @@
-(ns bindscript.demo-spa
+(ns bindscript.figwheel-adapter
   (:require
    [bindscript.api :refer [def-bindscript]]))
 
