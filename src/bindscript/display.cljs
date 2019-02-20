@@ -84,7 +84,11 @@
              :color col-code-highlight}}
     (if exception
       [exception-code exception "error"]
-      [Data (read-string value)])]])
+      [Data
+       (try
+         (read-string value)
+         (catch :default ex
+           (str value)))])]])
 
 
 (defn script-div
