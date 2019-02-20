@@ -1,5 +1,7 @@
 (ns ^:no-doc bindscript.display
   (:require
+   [clojure.pprint :as pprint]
+   [cljs.reader :refer [read-string]]
    [reagent.core :as r]
    [browser-headsup.api :as headsup]))
 
@@ -12,6 +14,12 @@
 (def col-code-highlight headsup/col-highlight)
 (def col-code-error     headsup/col-error)
 (def col-code-dimmed    headsup/col-dimmed)
+
+
+(defn Data [data]
+  [:div
+   {:style {:white-space :pre-wrap}}
+   (with-out-str (pprint/pprint data))])
 
 
 (defn exception-code
@@ -29,7 +37,7 @@
      [:div
       (str message)
       (if data
-        [:div (pr-str data)])
+        (data data))
       (if cause [exception-code cause "cause"])])])
 
 
@@ -76,7 +84,7 @@
              :color col-code-highlight}}
     (if exception
       [exception-code exception "error"]
-      value)]])
+      [Data (read-string value)])]])
 
 
 (defn script-div
