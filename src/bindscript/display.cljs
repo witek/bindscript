@@ -37,7 +37,7 @@
      [:div
       (str message)
       (if data
-        (data data))
+        (Data data))
       (if cause [exception-code cause "cause"])])])
 
 
