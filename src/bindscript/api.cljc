@@ -7,10 +7,8 @@
 
 ;; Provide a mechanism to disable execution of bindscripts.
 ;; In production this should yield false.
-;; TODO check if this works for production builds
-
 (def enabled?
-  #?(:cljs (-> js/window .-goog .-DEBUG)
+  #?(:cljs goog.DEBUG
      :clj  false))
 
 
