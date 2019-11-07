@@ -33,7 +33,7 @@
          message (if message message (str exception))
          data (ex-data exception)
          data (if (empty? data) nil data)
-         cause (or (ex-cause exception) (.-cause exception))]
+         cause (or (ex-cause exception) (.-cause ^js exception))]
      [:div
       (str message)
       (if data
